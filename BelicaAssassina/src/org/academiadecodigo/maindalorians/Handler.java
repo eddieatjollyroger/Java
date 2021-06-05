@@ -4,6 +4,7 @@ import org.academiadecodigo.simplegraphics.graphics.Color;
 import org.academiadecodigo.simplegraphics.graphics.Line;
 import org.academiadecodigo.simplegraphics.graphics.Rectangle;
 import org.academiadecodigo.simplegraphics.keyboard.KeyboardEvent;
+import org.academiadecodigo.simplegraphics.keyboard.KeyboardEventType;
 import org.academiadecodigo.simplegraphics.keyboard.KeyboardHandler;
 import org.academiadecodigo.simplegraphics.pictures.Picture;
 import org.academiadecodigo.simplegraphics.mouse.Mouse;
@@ -15,7 +16,6 @@ public class Handler implements KeyboardHandler {
     private Picture shot;
     private Picture ship;
     private Line mouse;
-    private Rectangle rectangle;
 
     public Handler() {
         Rectangle rect = new Rectangle(0, 0, 1200, 750);
@@ -31,35 +31,53 @@ public class Handler implements KeyboardHandler {
         if (event.getKey() == KeyboardEvent.KEY_SPACE) {
             fireShot();
         }
-        if (ship.getY() < 750) {
-        if (event.getKey() == KeyboardEvent.KEY_DOWN){
-            ship.translate(0, 20);
-        }}
-        if (ship.getY() > 0){
-        if (event.getKey() == KeyboardEvent.KEY_UP){
-            ship.translate(0 , -20);
+        switch (event.getKey()) {
+            case KeyboardEvent.KEY_DOWN:
+                if (ship.getMaxY() < 730) {
+                    ship.translate(0, 20);
+                }
+                break;
+            case KeyboardEvent.KEY_UP:
+                if (ship.getY() > 0) {
+                    ship.translate(0, -20);
+                }
+                break;
+            case KeyboardEvent.KEY_RIGHT:
+                if (ship.getMaxX() < 1175) {
+                    ship.translate(20, 0);
+                }
+                break;
+            case KeyboardEvent.KEY_LEFT:
+                if (ship.getX() > 0) {
+                    ship.translate(-20, 0);
+                }
+                break;
         }
-        }
-        if (ship.getMaxX() < 1150) {
-        if (event.getKey() == KeyboardEvent.KEY_RIGHT){
-            ship.translate(20 , 0);
-        }}
-        if (ship.getX() > 0) {
-            if (event.getKey() == KeyboardEvent.KEY_LEFT) {
-                ship.translate(-20, 0);
-            }
-        }
+
     }
-    public void fireShot(){
-        shot = new Picture(ship.getMaxX(), ship.getMaxY(), "resources/pewpew.png");
+
+    public void fireShot() {
+        shot = new Picture(ship.getMaxX(), (ship.getY()+(int)((ship.getMaxY()-ship.getY())/2))-2, "resources/fireshot.png");
         shot.draw();
-        moveShot();
+//        System.out.println("x:" + ship.getX());
+//        System.out.println("y:" + ship.getY());
+//        System.out.println("maxx:" + ship.getMaxX());
+//        System.out.println("maxy:" + ship.getMaxY());
+//        System.out.println("espermx:" + shot.getX());
+//        System.out.println("spermy:" + shot.getY());
+//        System.out.println("spermmaxx:" + shot.getMaxX());
+//        System.out.println("spermmaxy:" + shot.getMaxY());
+
+        //moveShot();
     }
-    public void moveShot(){
-        shot.translate(20, 0);
-        if (shot.getMaxX() > 1150){
+
+    public void moveShot() {
+        shot.translate(0, 0);
+        if (shot.getMaxX() > 1150) {
             shot.delete();
+
         }
+
     }
 
     @Override

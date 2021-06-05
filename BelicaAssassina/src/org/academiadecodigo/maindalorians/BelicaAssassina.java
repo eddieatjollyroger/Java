@@ -25,14 +25,14 @@ public class BelicaAssassina {
 //        cabeca.draw();
 //        Line uretra = new Line(150, 85, 152, 85);
 //        uretra.draw();
-       // Line mijo = new Line(150, 85, 800, 85);
+        // Line mijo = new Line(150, 85, 800, 85);
 
 
         Handler handler = new Handler();
 
         Keyboard keyboard = new Keyboard(handler);
 
-       KeyboardEvent spacePressed = new KeyboardEvent();
+        KeyboardEvent spacePressed = new KeyboardEvent();
         KeyboardEvent spaceDepressed = new KeyboardEvent();
 
         KeyboardEvent upArrowPress = new KeyboardEvent();
