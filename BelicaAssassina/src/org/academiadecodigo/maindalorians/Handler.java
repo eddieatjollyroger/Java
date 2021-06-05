@@ -12,19 +12,21 @@ import org.academiadecodigo.simplegraphics.mouse.MouseEvent;
 import org.academiadecodigo.simplegraphics.mouse.MouseHandler;
 
 public class Handler implements KeyboardHandler {
-
-    private Picture shot;
-    private Picture ship;
-    private Line mouse;
+    public Rectangle rect;
+    public Picture ship;
+    public Picture[] shots;
+    public boolean gameOver = false;
 
     public Handler() {
-        Rectangle rect = new Rectangle(0, 0, 1200, 750);
+        rect = new Rectangle(0, 0, 1200, 750);
         rect.setColor(Color.BLACK);
         rect.draw();
         rect.fill();
         ship = new Picture(0, 0, "resources/blica1.png");
         ship.draw();
+        shots = new Picture[200];
     }
+
 
     @Override
     public void keyPressed(KeyboardEvent event) {
@@ -57,8 +59,18 @@ public class Handler implements KeyboardHandler {
     }
 
     public void fireShot() {
-        shot = new Picture(ship.getMaxX(), (ship.getY()+(int)((ship.getMaxY()-ship.getY())/2))-2, "resources/fireshot.png");
-        shot.draw();
+        for (int i = 0; i < shots.length; i++) {
+            if (shots[i] == null) {
+                shots[i] = new Picture(ship.getMaxX(), (ship.getY() + (int) ((ship.getMaxY() - ship.getY()) / 2)) - 2, "resources/fireshot.png");
+                if (ship.getMaxX() + shots[i].getWidth() < rect.getWidth()) {
+                    shots[i].draw();
+                    System.out.println(i + "boas ");
+                    break;
+                }
+            }
+
+
+        }
 //        System.out.println("x:" + ship.getX());
 //        System.out.println("y:" + ship.getY());
 //        System.out.println("maxx:" + ship.getMaxX());
@@ -71,13 +83,17 @@ public class Handler implements KeyboardHandler {
         //moveShot();
     }
 
-    public void moveShot() {
-        shot.translate(0, 0);
-        if (shot.getMaxX() > 1150) {
-            shot.delete();
+    public void moveShot(int i) {
+        if (shots[i].getMaxX() > 1150) {
+            shots[i].delete();
+            shots[i] = null;
+            System.out.println(i);
+            System.out.println(shots[i]);
 
         }
-
+        if (shots[i] != null) {
+            shots[i].translate(20, 0);
+        }
     }
 
     @Override
