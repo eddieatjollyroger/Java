@@ -14,10 +14,7 @@ public class CarCrashGraphics {
     public static void main(String[] args) {
 
 
-        Rectangle rect = new Rectangle(0, 0, 1200, 750);
-        rect.setColor(Color.BLACK);
-        rect.draw();
-        rect.fill();
+
 //        Ellipse esquerdo = new Ellipse(30, 30, 50, 50);
 //        esquerdo.draw();
 //        Ellipse direito = new Ellipse(30, 90, 50, 50);
