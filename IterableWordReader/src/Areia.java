@@ -1,20 +1,19 @@
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.Iterator;
 
 public class Areia {
-    private static final String STRING = "beuas neuas teuas feuas";
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
 
-       String[] words = STRING.split(" ");
-
-        IterableWordReader wordReader = new IterableWordReader(words);
+        IterableWordReader wordReader = new IterableWordReader("boas.txt");
         Iterator<Integer> it = wordReader.iterator();
 
         while (it.hasNext()){
-            System.out.println("word is " + it.next());
+            System.out.println(it.next() + " is the word");
         }
-
+        System.out.println();
         for (Object w : wordReader){
-            System.out.println("word is " + w);
+            System.out.println(w + " is the word");
         }
     }
 }
