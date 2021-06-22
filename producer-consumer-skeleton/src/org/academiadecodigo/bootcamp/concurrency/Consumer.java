@@ -11,7 +11,7 @@ public class Consumer implements Runnable {
     private int elementNum;
 
     /**
-     * @param queue the blocking queue to consume elements from
+     * @param queue      the blocking queue to consume elements from
      * @param elementNum the number of elements to consume
      */
     public Consumer(BQueue queue, int elementNum) {
@@ -21,8 +21,28 @@ public class Consumer implements Runnable {
 
     @Override
     public void run() {
-        System.out.println(Thread.currentThread().getName());
-        System.out.println(queue.poll());
-    }
+        synchronized (queue) {
+                for (int i = 0; i < queue.getLimit(); i++) {
 
+                    if (queue.getSize() == 0) {
+                        try {
+                            System.out.println("----------------------");
+                            System.out.println(Thread.currentThread().getName() + " is waiting...");
+                            System.out.println("----------------------");
+                            queue.wait();
+                            i = -1;
+                            System.out.println("----------------------");
+                            System.out.println(Thread.currentThread().getName() + " is done waiting");
+                            System.out.println("----------------------");
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+
+                    } else {
+                        System.out.println(Thread.currentThread().getName() + " is consuming...");
+                        queue.poll();
+                    }
+                }
+        }
+    }
 }

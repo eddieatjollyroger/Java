@@ -1,5 +1,8 @@
 package org.academiadecodigo.bootcamp.concurrency.bqueue;
 
+import java.util.LinkedList;
+import java.util.Queue;
+
 /**
  * Blocking Queue
  *
@@ -7,8 +10,7 @@ package org.academiadecodigo.bootcamp.concurrency.bqueue;
  */
 public class BQueue<T> {
     private int limit;
-    private T data;
-    private int[] queue;
+    private Queue<T> queue;
 
     /**
      * Constructs a new queue with a maximum size
@@ -17,7 +19,7 @@ public class BQueue<T> {
      */
     public BQueue(int limit) {
         this.limit = limit;
-        queue = new int[limit];
+        queue = new LinkedList<>();
     }
 
     /**
@@ -26,20 +28,9 @@ public class BQueue<T> {
      *
      * @param data the data to add to the queue
      */
-    public synchronized void offer(int data) {
-        for (int i = 0; i < queue.length; i++) {
-            if (queue[i] == 0) {
-                queue[i] = data;
-                break;
-            }
-            if (i == queue.length - 1 && queue[i] == 1){
-                try {
-                    wait();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
+    public void offer(T data) {
+        queue.add(data);
+        notifyAll();
     }
 
     /**
@@ -48,22 +39,10 @@ public class BQueue<T> {
      *
      * @return the data from the head of the queue
      */
-    public synchronized int poll() {
-        int x = 0;
-        for (int i = 0; i < queue.length; i++) {
-            if (queue[i] == 1) {
-                x = i;
-                break;
-            }
-            if (i == queue.length - 1 && queue[i] == 0) {
-                try {
-                    wait();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-        return queue[x];
+    public T poll() {
+        T cenas = queue.poll();
+        notifyAll();
+        return cenas;
     }
 
     /**
@@ -72,13 +51,7 @@ public class BQueue<T> {
      * @return the number of elements
      */
     public int getSize() {
-        int counter = 0;
-        for (int i = 0; i < queue.length; i++) {
-            if (queue[i] != 0) {
-                counter++;
-            }
-        }
-        return counter;
+        return queue.size();
     }
 
     /**
@@ -87,8 +60,6 @@ public class BQueue<T> {
      * @return the maximum number of elements
      */
     public int getLimit() {
-
         return limit;
     }
-
 }
