@@ -3,6 +3,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -24,7 +25,7 @@ public class Sandbox {
             System.out.println(sandbox.findFirstWordsLonger(messageArray));
 
             System.out.println("words longest than 7: ");
-            System.out.println(sandbox.findLongestWords(messageArray));
+            System.out.println(sandbox.findLongestWords(messageArray, 4));
 
             System.out.println("Common words between 2 files are: ");
             System.out.println(sandbox.findCommonWords(messageArray, otherFileArray));
@@ -57,15 +58,12 @@ public class Sandbox {
 
         return result;
     }
-    public String findLongestWords(String[] words){
+    public String findLongestWords(String[] words, int number){
         String maybe = Stream.of(words)
-
-                .filter(word -> word.length() > 7)
-
-               // .map(String::toUpperCase)
-                //.reduce("", (word, word2) -> word.concat(" " + word2));
+                    .sorted(Comparator.comparingInt(String::length).reversed())
+                .limit(number)
                 .collect(Collectors.joining(" "));
-        //System.out.println(maybe);
+
                 return maybe;
     }
 
@@ -95,7 +93,7 @@ public class Sandbox {
                     return false;
                 })
                 .collect(Collectors.joining(" "));
-        
+
         return firstStream;
     }
 }
