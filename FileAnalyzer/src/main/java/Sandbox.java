@@ -24,7 +24,7 @@ public class Sandbox {
             System.out.println("first word longer than 7:");
             System.out.println(sandbox.findFirstWordsLonger(messageArray));
 
-            System.out.println("words longest than 7: ");
+            System.out.println("X longest words: ");
             System.out.println(sandbox.findLongestWords(messageArray, 4));
 
             System.out.println("Common words between 2 files are: ");
@@ -35,7 +35,6 @@ public class Sandbox {
         }
 
     }
-
 
 
     private String readFileByLine(String file) throws IOException {
@@ -50,7 +49,7 @@ public class Sandbox {
         String result = "";
 
         // using the buffered reader we can read lines
-        while((line = bReader.readLine()) != null) {
+        while ((line = bReader.readLine()) != null) {
             result += line + "\n";
         }
 
@@ -58,31 +57,31 @@ public class Sandbox {
 
         return result;
     }
-    public String findLongestWords(String[] words, int number){
+
+    public String findLongestWords(String[] words, int number) {
         String maybe = Stream.of(words)
-                    .sorted(Comparator.comparingInt(String::length).reversed())
+                .sorted(Comparator.comparingInt(String::length).reversed())
                 .limit(number)
                 .collect(Collectors.joining(" "));
-
-                return maybe;
+        return maybe;
     }
 
-    public long readAndCountWords(String[] words){
+    public long readAndCountWords(String[] words) {
         long maybe = Stream.of(words)
                 .count();
         return maybe;
     }
 
     private String findFirstWordsLonger(String[] messageArray) {
-    String firstWord = Stream.of(messageArray)
-            .findFirst()
-            .filter(word -> word.length() > 7).stream().limit(1)
+        String firstWord = Stream.of(messageArray)
+                .findFirst()
+                .filter(word -> word.length() > 7).stream().limit(1)
 
-            .collect(Collectors.joining(" "));
-            return firstWord;
+                .collect(Collectors.joining(" "));
+        return firstWord;
     }
 
-    private String findCommonWords(String[] messageArray, String[] otherFile){
+    private String findCommonWords(String[] messageArray, String[] otherFile) {
         String firstStream = Stream.of(messageArray)
                 .filter(words -> {
                     for (String s : otherFile) {
