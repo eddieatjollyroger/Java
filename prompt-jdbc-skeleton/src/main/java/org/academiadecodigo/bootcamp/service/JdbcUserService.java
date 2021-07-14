@@ -3,10 +3,7 @@ package org.academiadecodigo.bootcamp.service;
 import org.academiadecodigo.bootcamp.connection.ConnectionManager;
 import org.academiadecodigo.bootcamp.model.User;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,26 +23,67 @@ public class JdbcUserService implements UserService {
 
     @Override
     public boolean authenticate(String username, String password) {
+        try {
+        String query = "SELECT * FROM table WHERE id=? AND name=?";
+        PreparedStatement statement = dbConnection.prepareStatement(query);
+
+        // set values for the placeholders
+        statement.setString(1, username);
+        statement.setString(2, password);
+
+
+
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()){
+                return true;
+            }
+            return false;
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
         return false;
     }
 
     @Override
     public void add(User user) {
-        if (!users.containsKey(user.getUsername())) {
-            users.put(user.getUsername(), user);
+//        if (!users.containsKey(user.getUsername())) {
+//            users.put(user.getUsername(), user);
+//        }
+
+        String query = "INSERT INTO user (username, password, email, firstname, lastname, phone) VALUES (?, ?, ?, ?, ?, ?)";
+        PreparedStatement statement = null;
+        try {
+            statement = dbConnection.prepareStatement(query);
+
+            statement.setString(1, user.getUsername());
+            statement.setString(2, user.getPassword());
+            statement.setString(3, user.getEmail());
+            statement.setString(4, user.getFirstName());
+            statement.setString(5, user.getLastName());
+            statement.setString(6, user.getPhone());
+
+            System.out.println(statement);
+            // execute the query
+            //ResultSet resultSet = statement.executeQuery();
+            statement.executeUpdate();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
         }
     }
 
     @Override
     public User findByName(String username) {
-        Statement statement = null;
+
         // ... connection and statements....
         try {
-             statement = dbConnection.createStatement();
 
-            String query = "SELECT * FROM user WHERE username="+ "'"+username+"'";
+            String query = "SELECT * FROM user WHERE username=?";
+            PreparedStatement statement = dbConnection.prepareStatement(query);
+            statement.setString(1,username);
+            System.out.println(statement);
             // execute the query
-            ResultSet resultSet = statement.executeQuery(query);
+            ResultSet resultSet = statement.executeQuery();
+
 
             // user exists
             if (resultSet.next()) {
@@ -58,36 +96,31 @@ public class JdbcUserService implements UserService {
                 String phoneNumber = resultSet.getString("phone");
 
 
-                user = new User(usernameValue, emailValue, passwordValue,  firstName, lastName, phoneNumber);
+                return new User(usernameValue, emailValue, passwordValue,  firstName, lastName, phoneNumber);
             }
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
-        return user;
+        return null;
     }
     @Override
     public List<User> findAll() {
             Statement statement = null;
 
             try {
-                statement = statement = dbConnection.createStatement();
-            } catch (SQLException throwables) {
-                throwables.printStackTrace();
-            }
+                statement = dbConnection.createStatement();
+
             // execute the query
 
             String query = "SELECT * FROM user";
 
             ResultSet resultSet = null;
-            try {
-                resultSet = statement.executeQuery(query);
-            } catch (SQLException throwables) {
-                throwables.printStackTrace();
-            }
 
-            // user exists
-            try {
-                if (resultSet.next()) {
+                resultSet = statement.executeQuery(query);
+
+
+
+                while (resultSet.next()) {
 
                     String usernameValue = resultSet.getString("username");
                     String passwordValue = resultSet.getString("password");
@@ -98,7 +131,8 @@ public class JdbcUserService implements UserService {
 
 
                     user = new User(usernameValue, emailValue, passwordValue,  firstName, lastName, phoneNumber);
-                    add(user);
+                    users.put(user.getUsername(), user);
+                    System.out.println(user);
                 }
             } catch (SQLException throwables) {
                 throwables.printStackTrace();

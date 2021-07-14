@@ -37,15 +37,16 @@ public class App {
                 "Audrey", "Lopes", "934567890"));
 
         JdbcUserService dbService = new JdbcUserService();
-        dbService.add(new User("rui", "ferrao@academiadecodigo.org", Security.getHash("academiadecodigo"),
-                "Rui", "Ferrão", "912345678"));
-        dbService.add(new User("faustino", "faustino@academiadecodigo.org", Security.getHash("academiadecodigo"),
-                "João", "Faustino", "966666666"));
-        dbService.add(new User("audrey", "audrey@academiadecodigo.org", Security.getHash("academiadecodigo"),
-                "Audrey", "Lopes", "934567890"));
+//        dbService.add(new User("rui", "ferrao@academiadecodigo.org", Security.getHash("academiadecodigo"),
+//                "Rui", "Ferrão", "912345678"));
+//        dbService.add(new User("faustino", "faustino@academiadecodigo.org", Security.getHash("academiadecodigo"),
+//                "João", "Faustino", "966666666"));
+//        dbService.add(new User("audrey", "audrey@academiadecodigo.org", Security.getHash("academiadecodigo"),
+//                "Audrey", "Lopes", "934567890"));
 
         System.out.println(dbService.count());
         System.out.println(dbService.findByName("rui"));
+        System.out.println("finding all");
         System.out.println(dbService.findAll());
         // Wire login controller and view
         loginView.setPrompt(prompt);
